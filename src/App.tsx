@@ -2,6 +2,7 @@ import { RouterProvider, useRouter } from './context/RouterContext';
 import { DataProvider } from './context/DataContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { AIConfigProvider } from './context/AIConfigContext';
 import { AppShell } from './components/layout/AppShell';
 
 // Pages
@@ -14,6 +15,7 @@ import { AssessmentsPage } from './pages/instructor/AssessmentsPage';
 import { AnalyticsPage } from './pages/instructor/AnalyticsPage';
 import { RecommendationsPage } from './pages/instructor/RecommendationsPage';
 import { StudentsPage } from './pages/instructor/StudentsPage';
+import { AdminAiConfigPage } from './pages/admin/AdminAiConfigPage';
 
 function RouteSwitch() {
   const { currentPath } = useRouter();
@@ -22,6 +24,11 @@ function RouteSwitch() {
   // Match routes
   if (currentPath === '/login') {
     return <LoginPage />;
+  }
+
+  // Admin routes
+  if (currentPath === '/admin/ai-config' || currentPath === '/admin') {
+    return <AdminAiConfigPage />;
   }
 
   // Student routes
@@ -53,6 +60,9 @@ function RouteSwitch() {
   }
 
   // Default fallback based on role
+  if (role === 'admin') {
+    return <AdminAiConfigPage />;
+  }
   if (role === 'student') {
     return <StudentHomePage />;
   }
@@ -64,11 +74,13 @@ export default function App() {
     <RouterProvider>
       <DataProvider>
         <AuthProvider>
-          <NotificationProvider>
-            <AppShell>
-              <RouteSwitch />
-            </AppShell>
-          </NotificationProvider>
+          <AIConfigProvider>
+            <NotificationProvider>
+              <AppShell>
+                <RouteSwitch />
+              </AppShell>
+            </NotificationProvider>
+          </AIConfigProvider>
         </AuthProvider>
       </DataProvider>
     </RouterProvider>

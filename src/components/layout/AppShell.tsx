@@ -17,23 +17,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isLoginPage = currentPath === '/login';
 
   // Role Separation Check
-  const isStudentOnInstructorRoute = role === 'student' && currentPath.startsWith('/instructor');
+  const isStudentOnRestrictedRoute =
+    role === 'student' && (currentPath.startsWith('/instructor') || currentPath.startsWith('/admin'));
 
   return (
     <div className="min-h-screen bg-[#0B0D13] text-[#F8FAFC] flex flex-col font-sans">
       {!isLoginPage && <Header />}
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {isStudentOnInstructorRoute ? (
+        {isStudentOnRestrictedRoute ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 bg-[#121520] border border-[#2B344D] rounded-xl max-w-xl mx-auto">
             <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 mb-4">
               <ShieldAlert className="w-8 h-8" />
             </div>
             <h2 className="text-lg font-bold text-white mb-2">
-              Instructor Analytics Restricted
+              Staff & Administrator Area Restricted
             </h2>
             <p className="text-xs text-[#94A3B8] leading-relaxed mb-6 max-w-md">
-              Student accounts do not have permission to view instructor diagnostics, cohort heatmaps, or exam authoring tools.
+              Student accounts do not have permission to view cohort diagnostics, exam authoring tools, or System Administrator AI engine settings.
             </p>
             <div className="flex items-center gap-3">
               <Button

@@ -26,10 +26,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(found);
     setRole(found.role);
 
-    if (found.role === 'student' && currentPath.startsWith('/instructor')) {
+    if (found.role === 'student' && (currentPath.startsWith('/instructor') || currentPath.startsWith('/admin'))) {
       navigate('/student/home');
-    } else if (found.role === 'instructor' && currentPath.startsWith('/student')) {
+    } else if (found.role === 'instructor' && (currentPath.startsWith('/student') || currentPath.startsWith('/admin'))) {
       navigate('/instructor/dashboard');
+    } else if (found.role === 'admin') {
+      navigate('/admin/ai-config');
     }
   };
 
@@ -45,14 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const stu = DEMO_USERS.find((u) => u.role === 'student') || DEMO_USERS[1];
       setUser(stu);
       setRole('student');
-      if (currentPath.startsWith('/instructor')) {
+      if (currentPath.startsWith('/instructor') || currentPath.startsWith('/admin')) {
         navigate('/student/home');
       }
     } else {
       const admin = DEMO_USERS.find((u) => u.role === 'admin') || DEMO_USERS[DEMO_USERS.length - 1];
       setUser(admin);
       setRole('admin');
-      navigate('/instructor/dashboard');
+      navigate('/admin/ai-config');
     }
   };
 
@@ -62,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(found);
       setRole(found.role);
       if (found.role === 'student') navigate('/student/home');
+      else if (found.role === 'admin') navigate('/admin/ai-config');
       else navigate('/instructor/dashboard');
       return;
     }

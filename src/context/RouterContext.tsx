@@ -9,7 +9,8 @@ export type AppRoute =
   | '/instructor/assessments'
   | '/instructor/analytics'
   | '/instructor/recommendations'
-  | '/instructor/students';
+  | '/instructor/students'
+  | '/admin/ai-config';
 
 interface RouterContextType {
   currentPath: string;

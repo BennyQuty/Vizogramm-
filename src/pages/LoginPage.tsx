@@ -76,6 +76,24 @@ export function LoginPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {/* System Administrator */}
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('user-admin')}
+              className="sm:col-span-2 p-2.5 rounded-lg border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-colors cursor-pointer flex items-center justify-between shadow-sm"
+            >
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-sky-200">
+                  <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
+                  <span>System Administrator (AI Engine & API Setup)</span>
+                </div>
+                <span className="text-[10px] text-[#94A3B8] block font-mono">
+                  admin@vizogramm.demo · Paste Gemini API Key & Configure Models
+                </span>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-sky-400" />
+            </button>
+
             {/* Instructor */}
             <button
               type="button"

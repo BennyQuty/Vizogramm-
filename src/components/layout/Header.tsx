@@ -18,6 +18,7 @@ import {
   Shield,
   Layers,
   HelpCircle,
+  Cpu,
 } from 'lucide-react';
 
 export function Header() {
@@ -30,6 +31,15 @@ export function Header() {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [demoGuideOpen, setDemoGuideOpen] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+
+  const adminNav: { label: string; path: AppRoute }[] = [
+    { label: 'AI Diagnostic Engine', path: '/admin/ai-config' },
+    { label: 'Overview', path: '/instructor/dashboard' },
+    { label: 'Assessments', path: '/instructor/assessments' },
+    { label: 'Cohort Diagnostics', path: '/instructor/analytics' },
+    { label: 'Interventions', path: '/instructor/recommendations' },
+    { label: 'Student Roster', path: '/instructor/students' },
+  ];
 
   const instructorNav: { label: string; path: AppRoute }[] = [
     { label: 'Overview', path: '/instructor/dashboard' },
@@ -45,7 +55,7 @@ export function Header() {
     { label: 'My Progress', path: '/student/submission' },
   ];
 
-  const navItems = role === 'instructor' || role === 'admin' ? instructorNav : studentNav;
+  const navItems = role === 'admin' ? adminNav : role === 'instructor' ? instructorNav : studentNav;
 
   const handleNavClick = (path: AppRoute) => {
     navigate(path);
@@ -123,6 +133,21 @@ export function Header() {
 
             {/* Zone 3: Demo Tools, Account Switcher & Role CTA */}
             <div className="flex items-center gap-2 shrink-0">
+              {/* AI Diagnostic Engine Shortcut */}
+              <button
+                type="button"
+                onClick={() => navigate('/admin/ai-config')}
+                title="System Administrator: Configure Gemini AI API Key & Models"
+                className={`inline-flex items-center gap-1.5 h-8 px-2.5 text-[11px] font-medium rounded-lg border transition-colors cursor-pointer ${
+                  currentPath === '/admin/ai-config'
+                    ? 'border-sky-400 bg-sky-500/20 text-sky-200 ring-1 ring-sky-400'
+                    : 'border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300'
+                }`}
+              >
+                <Cpu className="w-3.5 h-3.5 text-sky-400" />
+                <span className="hidden sm:inline">AI Engine API</span>
+              </button>
+
               {/* Scenarios Guide Button */}
               <button
                 type="button"
