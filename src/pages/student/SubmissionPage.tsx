@@ -18,6 +18,8 @@ import {
   Lightbulb,
 } from 'lucide-react';
 
+import { CodeTraceComparator } from '../../components/ui/CodeTraceComparator';
+
 export function SubmissionPage() {
   const { navigate } = useRouter();
   const { user } = useAuth();
@@ -27,6 +29,7 @@ export function SubmissionPage() {
     competencies,
     getSubmissionByStudent,
     getStudentProfile,
+    getAnalysisBySubmission,
   } = useData();
 
   const [activeTab, setActiveTab] = useState<'feedback' | 'questions'>('feedback');
@@ -34,6 +37,7 @@ export function SubmissionPage() {
   const assessment = assessments[0];
   const submission = getSubmissionByStudent(user.id, assessment.id);
   const profile = getStudentProfile(user.id);
+  const analysis = submission ? getAnalysisBySubmission(submission.id) : undefined;
 
   // If no submission yet
   if (!submission) {
@@ -245,7 +249,64 @@ export function SubmissionPage() {
             )}
           </div>
 
-          {/* SECTION C: Your Next Steps */}
+          {/* SECTION C: Cognitive Execution Traces (Side-by-Side Dual Pane) */}
+          {analysis?.findings && analysis.findings.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm font-bold text-sky-300">
+                  <Code2 className="w-4 h-4 text-sky-400" />
+                  <h3>Cognitive Execution Traces & Mental Models</h3>
+                </div>
+                <span className="text-[10px] text-[#64748B] font-mono">
+                  {analysis.findings.length} Pattern{analysis.findings.length > 1 ? 's' : ''} Detected
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {analysis.findings.map((f) => {
+                  if (f.codeComparison) {
+                    return (
+                      <CodeTraceComparator
+                        key={f.id}
+                        category={f.category}
+                        flawedSnippet={f.codeComparison.flawedSnippet}
+                        canonicalSnippet={f.codeComparison.canonicalSnippet}
+                        explanation={f.codeComparison.explanation}
+                        confidence={f.confidence}
+                        suggestedFollowUp={f.suggestedFollowUp}
+                        title={`Observed Pattern: ${f.observedPattern.slice(0, 50)}...`}
+                      />
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={f.id}
+                      className="p-4 rounded-xl bg-[#0E121E] border border-[#232C42] space-y-2 text-xs"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-white">
+                          {f.observedPattern}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono border border-amber-500/30 bg-amber-500/10 text-amber-300">
+                          {f.category}
+                        </span>
+                      </div>
+                      <p className="text-[#94A3B8] leading-relaxed">
+                        {f.interpretation}
+                      </p>
+                      <div className="pt-1 text-[11px] text-sky-300 flex items-center gap-1.5">
+                        <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                        <span>{f.suggestedFollowUp}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* SECTION D: Your Next Steps */}
           <div className="p-5 rounded-2xl bg-[#161B29] border border-purple-500/30 space-y-3 text-xs">
             <div className="flex items-center gap-2 text-purple-300 font-bold text-sm">
               <Sparkles className="w-4 h-4 text-purple-400" />

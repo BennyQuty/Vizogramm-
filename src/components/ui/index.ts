@@ -11,3 +11,4 @@ export * from './Progress';
 export * from './EmptyState';
 export * from './HeatmapCell';
 export * from './Notification';
+export * from './CodeTraceComparator';

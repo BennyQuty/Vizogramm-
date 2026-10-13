@@ -10,6 +10,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '.
 import { TextInput } from '../../components/ui/FormControls';
 import { Dialog } from '../../components/ui/Dialog';
 import { ProgressBar } from '../../components/ui/Progress';
+import { CodeTraceComparator } from '../../components/ui/CodeTraceComparator';
 import {
   Search,
   UserCheck,
@@ -321,28 +322,45 @@ export function StudentsPage() {
                   <AlertTriangle className="w-4 h-4" />
                   <span>Flagged Mental Model Deviations:</span>
                 </h4>
-                <div className="space-y-2">
-                  {selectedAnalysis.findings.map((f) => (
-                    <div
-                      key={f.id}
-                      className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg space-y-1"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-orange-300 block">
-                          {f.category}
-                        </span>
-                        <span className="text-[10px] text-orange-400 font-mono">
-                          Confidence: {f.confidence}
-                        </span>
+                <div className="space-y-3">
+                  {selectedAnalysis.findings.map((f) => {
+                    if (f.codeComparison) {
+                      return (
+                        <CodeTraceComparator
+                          key={f.id}
+                          category={f.category}
+                          flawedSnippet={f.codeComparison.flawedSnippet}
+                          canonicalSnippet={f.codeComparison.canonicalSnippet}
+                          explanation={f.codeComparison.explanation}
+                          confidence={f.confidence}
+                          suggestedFollowUp={f.suggestedFollowUp}
+                          title={`Observed: ${f.observedPattern.slice(0, 50)}...`}
+                        />
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={f.id}
+                        className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-orange-300 block">
+                            {f.category}
+                          </span>
+                          <span className="text-[10px] text-orange-400 font-mono">
+                            Confidence: {f.confidence}
+                          </span>
+                        </div>
+                        <p className="text-[#94A3B8] leading-relaxed">
+                          {f.observedPattern}
+                        </p>
+                        <p className="text-purple-300 text-[11px]">
+                          Remedy: {f.suggestedFollowUp}
+                        </p>
                       </div>
-                      <p className="text-[#94A3B8] leading-relaxed">
-                        {f.observedPattern}
-                      </p>
-                      <p className="text-purple-300 text-[11px]">
-                        Remedy: {f.suggestedFollowUp}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
