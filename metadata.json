@@ -1,6 +1,6 @@
 {
   "name": "Vizogramm",
-  "description": "AI-powered post-exam diagnostic platform for introductory Computer Science students and instructors.",
+  "description": "AI-powered baseline diagnostic and cohort pacing platform for first-year computing education.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
